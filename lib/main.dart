@@ -18,6 +18,7 @@ import 'package:flutter/material.dart';
 import 'package:travel_guide_app/auth/auth_page.dart';
 import 'package:travel_guide_app/auth/login_or_register_page.dart';
 import 'package:travel_guide_app/firebase_options.dart';
+import 'package:travel_guide_app/screen/favorite_scree.dart';
 import 'package:travel_guide_app/screen/home_screen.dart';
 import 'package:travel_guide_app/auth/auth_screen/profile_screen.dart';
 import 'package:travel_guide_app/screen/note_screen.dart';
@@ -47,6 +48,7 @@ class TravelGuide extends StatelessWidget {
         '/home_page': (context) => const MyHomeScreen(),
         '/profile_page': (context) => MyProfile(),
         '/note_page': (context) => MyNote(),
+        '/favorite_page': (context) => const FavoriteScreen(),
       },
     );
   }

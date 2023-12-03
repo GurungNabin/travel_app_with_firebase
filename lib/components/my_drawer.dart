@@ -77,6 +77,22 @@ class MyDrawer extends StatelessWidget {
                 },
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.only(left: 25.0),
+              child: ListTile(
+                leading: Icon(
+                  Icons.favorite,
+                  color: Theme.of(context).colorScheme.inversePrimary,
+                ),
+                title: const Text("F A V O R I T E"),
+                onTap: () {
+                  //this is already the home screen
+                  Navigator.pop(context);
+                  //navigate to user page
+                  Navigator.pushNamed(context, '/favorite_page');
+                },
+              ),
+            ),
           ],
         ),
         //logout tile
