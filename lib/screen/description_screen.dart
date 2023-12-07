@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:provider/provider.dart';
 import 'package:travel_guide_app/leaflet_map/leaflet_main.dart';
+import 'package:travel_guide_app/places/models/favorite_model.dart';
 
 class DescriptionScreen extends StatefulWidget {
   const DescriptionScreen(
@@ -33,7 +35,7 @@ class _DescriptionScreenState extends State<DescriptionScreen> {
   @override
   void initState() {
     super.initState();
-    assignValue();
+    //assignValue();
   }
 
   void assignValue() async {
@@ -66,6 +68,8 @@ class _DescriptionScreenState extends State<DescriptionScreen> {
     }
   }
 
+  bool isFavorite = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,6 +77,37 @@ class _DescriptionScreenState extends State<DescriptionScreen> {
         backgroundColor: Theme.of(context).colorScheme.primary,
         elevation: 2,
         title: Text(widget.name),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 8),
+            child: IconButton(
+              icon: Icon(isFavorite ? Icons.favorite : Icons.favorite_border),
+              color: isFavorite ? Colors.red : Colors.white,
+              onPressed: () {
+                setState(() {
+                  isFavorite = !isFavorite;
+                });
+                //Access the FavoriteModel and add/remove the current places data from favorites
+                final Map<String, dynamic> placesData = {
+                  'name': widget.name,
+                  'address': widget.address,
+                  'latitude': widget.latitude,
+                  'longitude': widget.longitude,
+                  'description': widget.description,
+                  'image': widget.image,
+                };
+
+                final FavoriteModel favoriteModel =
+                    Provider.of<FavoriteModel>(context, listen: false);
+                if (isFavorite) {
+                  favoriteModel.addToFavorites(placesData);
+                } else {
+                  favoriteModel.removeFromFavorite(placesData);
+                }
+              },
+            ),
+          )
+        ],
       ),
       body: isLoading
           ? const Center(

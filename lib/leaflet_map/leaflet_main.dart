@@ -26,7 +26,6 @@ class _MyMapState extends State<MyMap> {
 
   @override
   void initState() {
-    
     super.initState();
     getLongitudeAndLatitude();
   }
@@ -47,6 +46,33 @@ class _MyMapState extends State<MyMap> {
         await placemarkFromCoordinates(position.latitude, position.longitude);
     print("The sublocality name is ${placemark[0].subLocality}");
     destinationName = placemark[0].subLocality!;
+
+    List<Location> start_l = await locationFromAddress(
+        destinationName.replaceAll("Bagbazar", "Putalisadak"));
+    List<Location> end_l = await locationFromAddress(widget.placeName);
+    var v1 = start_l[0].latitude;
+    var v2 = start_l[0].longitude;
+    var v3 = end_l[0].latitude;
+    var v4 = end_l[0].longitude;
+    var url = Uri.parse(
+        'http://router.project-osrm.org/route/v1/driving/$v2,$v1;$v4,$v3?steps=true&annotations=true&geometries=geojson&overview=full');
+    var response = await http.get(url);
+    print(response.body);
+    setState(() {
+      routpoints = [];
+      var ruter =
+          jsonDecode(response.body)['routes'][0]['geometry']['coordinates'];
+      for (int i = 0; i < ruter.length; i++) {
+        var reep = ruter[i].toString();
+        reep = reep.replaceAll("[", "");
+        reep = reep.replaceAll("]", "");
+        var lat1 = reep.split(',');
+        var long1 = reep.split(",");
+        routpoints.add(LatLng(double.parse(lat1[1]), double.parse(long1[0])));
+      }
+      isVisible = !isVisible;
+      print(routpoints);
+    });
 
     setState(() {
       isLoading = false;
@@ -74,42 +100,6 @@ class _MyMapState extends State<MyMap> {
               : SingleChildScrollView(
                   child: Column(
                     children: [
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.grey[500]),
-                        onPressed: () async {
-                          List<Location> start_l = await locationFromAddress(
-                              destinationName.replaceAll(
-                                  "Bagbazar", "Putalisadak"));
-                          List<Location> end_l =
-                              await locationFromAddress(widget.placeName);
-                          var v1 = start_l[0].latitude;
-                          var v2 = start_l[0].longitude;
-                          var v3 = end_l[0].latitude;
-                          var v4 = end_l[0].longitude;
-                          var url = Uri.parse(
-                              'http://router.project-osrm.org/route/v1/driving/$v2,$v1;$v4,$v3?steps=true&annotations=true&geometries=geojson&overview=full');
-                          var response = await http.get(url);
-                          print(response.body);
-                          setState(() {
-                            routpoints = [];
-                            var ruter = jsonDecode(response.body)['routes'][0]
-                                ['geometry']['coordinates'];
-                            for (int i = 0; i < ruter.length; i++) {
-                              var reep = ruter[i].toString();
-                              reep = reep.replaceAll("[", "");
-                              reep = reep.replaceAll("]", "");
-                              var lat1 = reep.split(',');
-                              var long1 = reep.split(",");
-                              routpoints.add(LatLng(double.parse(lat1[1]),
-                                  double.parse(long1[0])));
-                            }
-                            isVisible = !isVisible;
-                            print(routpoints);
-                          });
-                        },
-                        child: const Text('Press'),
-                      ),
                       const SizedBox(
                         height: 10,
                       ),

@@ -56,7 +56,7 @@ class AllPlacesModels {
       };
 }
 
-enum Title { DURBAR_SQUARE, MONASTERY, TEMPLE, ADVENTURE, PARK, LOCAL }
+enum Title { DURBAR_SQUARE, MONASTERY, TEMPLE, ADVENTURE, PARK, LOCAL, ID }
 
 final titleValues = EnumValues({
   "durbar square": Title.DURBAR_SQUARE,
@@ -64,7 +64,8 @@ final titleValues = EnumValues({
   "temple": Title.TEMPLE,
   "adventure": Title.ADVENTURE,
   "park": Title.PARK,
-  "local": Title.LOCAL
+  "local": Title.LOCAL,
+  "id": Title.ID
 });
 
 class EnumValues<T> {
